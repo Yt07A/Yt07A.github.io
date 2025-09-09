@@ -1,40 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Dam Safety Calculator</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
-    h1 { text-align: center; }
-    label { display: block; margin-top: 10px; }
-    input, select, button { margin-top: 5px; padding: 8px; width: 100%; }
-    button { margin-top: 15px; background: #007bff; color: white; border: none; cursor: pointer; }
-    button:hover { background: #0056b3; }
-    #results { margin-top: 20px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; }
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0; padding: 0;
+      background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      max-width: 600px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      color: #34495e;
+    }
+
+    input, select {
+      margin-top: 6px;
+      padding: 10px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #36d1dc, #5b86e5);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
+    #results {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 16px;
+      background: #f4f7fb;
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+    }
+
+    .safe {
+      color: #27ae60;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .danger {
+      color: #e74c3c;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    .result-block {
+      margin: 10px 0;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
-  <h1>Dam Safety Calculator</h1>
-  
-  <label>Dam height (m):</label>
-  <input type="number" id="height" step="0.01">
+  <div class="container">
+    <h1>🌊 Dam Safety Calculator</h1>
 
-  <label>Top width (m):</label>
-  <input type="number" id="topWidth" step="0.01">
+    <label>Dam height (m):</label>
+    <input type="number" id="height" step="0.01">
 
-  <label>Base width (m):</label>
-  <input type="number" id="baseWidth" step="0.01">
+    <label>Top width (m):</label>
+    <input type="number" id="topWidth" step="0.01">
 
-  <label>Material:</label>
-  <select id="material">
-    <option value="Plastic">Plastic</option>
-    <option value="Wood">Wood</option>
-    <option value="Concrete">Concrete</option>
-    <option value="Reinforced Concrete">Reinforced Concrete</option>
-  </select>
+    <label>Base width (m):</label>
+    <input type="number" id="baseWidth" step="0.01">
 
-  <button onclick="calculate()">Calculate</button>
+    <label>Material:</label>
+    <select id="material">
+      <option value="Plastic">Plastic</option>
+      <option value="Wood">Wood</option>
+      <option value="Concrete">Concrete</option>
+      <option value="Reinforced Concrete">Reinforced Concrete</option>
+    </select>
 
-  <div id="results"></div>
+    <button onclick="calculate()">Calculate</button>
+
+    <div id="results"></div>
+  </div>
 
   <script>
     function calculate() {
@@ -59,16 +139,15 @@
       let pressure = rho * g * height;
       let force = 0.5 * rho * g * height ** 2 * avgWidth;
 
-      let output = "<h3>=== Results ===</h3>";
-      output += "Area: " + area.toFixed(2) + " m²<br>";
-      output += "Material Strength: " + strength.toFixed(2) + " N<br>";
-      output += "Water Pressure: " + pressure.toFixed(2) + " Pa<br>";
-      output += "Water Force: " + force.toFixed(2) + " N<br>";
+      let output = `<div class="result-block">Area: ${area.toFixed(2)} m²</div>`;
+      output += `<div class="result-block">Material Strength: ${strength.toFixed(2)} N</div>`;
+      output += `<div class="result-block">Water Pressure: ${pressure.toFixed(2)} Pa</div>`;
+      output += `<div class="result-block">Water Force: ${force.toFixed(2)} N</div>`;
 
       if (force > strength) {
-        output += "<b style='color:red'>Collapse Risk! Dam may fail!</b>";
+        output += `<p class="danger">⚠️ Collapse Risk! Dam may fail!</p>`;
       } else {
-        output += "<b style='color:green'>Safe! Dam is stable.</b>";
+        output += `<p class="safe">✅ Safe! Dam is stable.</p>`;
       }
 
       document.getElementById("results").innerHTML = output;
@@ -76,3 +155,4 @@
   </script>
 </body>
 </html>
+
