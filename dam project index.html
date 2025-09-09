@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dam Safety Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; }
+    h1 { text-align: center; }
+    label { display: block; margin-top: 10px; }
+    input, select, button { margin-top: 5px; padding: 8px; width: 100%; }
+    button { margin-top: 15px; background: #007bff; color: white; border: none; cursor: pointer; }
+    button:hover { background: #0056b3; }
+    #results { margin-top: 20px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; }
+  </style>
+</head>
+<body>
+  <h1>Dam Safety Calculator</h1>
+  
+  <label>Dam height (m):</label>
+  <input type="number" id="height" step="0.01">
+
+  <label>Top width (m):</label>
+  <input type="number" id="topWidth" step="0.01">
+
+  <label>Base width (m):</label>
+  <input type="number" id="baseWidth" step="0.01">
+
+  <label>Material:</label>
+  <select id="material">
+    <option value="Plastic">Plastic</option>
+    <option value="Wood">Wood</option>
+    <option value="Concrete">Concrete</option>
+    <option value="Reinforced Concrete">Reinforced Concrete</option>
+  </select>
+
+  <button onclick="calculate()">Calculate</button>
+
+  <div id="results"></div>
+
+  <script>
+    function calculate() {
+      const rho = 1000;
+      const g = 9.81;
+
+      let height = parseFloat(document.getElementById("height").value);
+      let topWidth = parseFloat(document.getElementById("topWidth").value);
+      let baseWidth = parseFloat(document.getElementById("baseWidth").value);
+      let material = document.getElementById("material").value;
+
+      let avgWidth = (topWidth + baseWidth) / 2;
+      let area = height * avgWidth;
+
+      let strengthPerM2 = 0;
+      if (material === "Plastic") strengthPerM2 = 20000;
+      else if (material === "Wood") strengthPerM2 = 40000;
+      else if (material === "Concrete") strengthPerM2 = 60000;
+      else if (material === "Reinforced Concrete") strengthPerM2 = 150000;
+
+      let strength = strengthPerM2 * area;
+      let pressure = rho * g * height;
+      let force = 0.5 * rho * g * height ** 2 * avgWidth;
+
+      let output = "<h3>=== Results ===</h3>";
+      output += "Area: " + area.toFixed(2) + " m²<br>";
+      output += "Material Strength: " + strength.toFixed(2) + " N<br>";
+      output += "Water Pressure: " + pressure.toFixed(2) + " Pa<br>";
+      output += "Water Force: " + force.toFixed(2) + " N<br>";
+
+      if (force > strength) {
+        output += "<b style='color:red'>Collapse Risk! Dam may fail!</b>";
+      } else {
+        output += "<b style='color:green'>Safe! Dam is stable.</b>";
+      }
+
+      document.getElementById("results").innerHTML = output;
+    }
+  </script>
+</body>
+</html>
